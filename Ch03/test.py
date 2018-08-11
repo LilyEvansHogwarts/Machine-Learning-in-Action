@@ -18,3 +18,11 @@ print retrieveTree(1)
 
 print trees.getNumLeafs(retrieveTree(1))
 print trees.getTreeDepth(retrieveTree(1))
+
+
+fr = open('./dataset/lenses.txt')
+lenses = [inst.strip().split('\t') for inst in fr.readlines()]
+lensesLabels = ['age','prescript','astigmatic','tearRate']
+lensesTree = trees.createTree(lenses, lensesLabels)
+print lensesTree
+trees.createPlot(lensesTree)
