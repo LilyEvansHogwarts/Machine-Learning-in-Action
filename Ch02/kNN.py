@@ -2,6 +2,7 @@ from numpy import *
 import operator
 import matplotlib
 import matplotlib.pyplot as plt
+import os
 
 def createDataSet():
     group = array([[1.0, 1.1], [1.0, 1.0], [0, 0], [0, 0.1]])
@@ -72,3 +73,39 @@ def classifyPerson():
     inArr = array([[ffMiles, percentTats, iceCream]])
     classifierResult = classify0((inArr - minVals)/ranges, normMat, datingLabels, 3)
     print 'You will probably like this person:', resultList[classifierResult]
+
+def img2vector(filename):
+    returnVect = zeros((1, 1024))
+    fr = open(filename)
+    for i in range(32):
+        lineStr = fr.readline()
+        for j in range(32):
+            returnVect[0,32*i+j] = int(lineStr[j])
+    return returnVect
+
+def handwrittingClassTest():
+    hwLabels = []
+    trainingFileList = os.listdir('./dataset/trainingDigits')
+    m = len(trainingFileList)
+    trainingMat = zeros((m, 1024))
+    for i in range(m):
+        fileNameStr = trainingFileList[i]
+        classNameStr = int(fileNameStr.split('_')[0])
+        hwLabels.append(classNameStr)
+        trainingMat[i] = img2vector('./dataset/trainingDigits/'+fileNameStr)
+    testFileList = os.listdir('./dataset/testDigits')
+    errorCount = 0.0
+    mTest = len(testFileList)
+    for i in range(mTest):
+        fileNameStr = testFileList[i]
+        classNameStr = int(fileNameStr.split('_')[0])
+        vectorUnderTest = img2vector('./dataset/testDigits/'+fileNameStr)
+        classifierResult = classify0(vectorUnderTest, trainingMat, hwLabels, 3)
+        print 'The classifier came back with:',classifierResult,'. The real answer is:',classNameStr
+        if classifierResult != classNameStr:
+            errorCount += 1.0
+    print 'The total number of errors is', errorCount
+    print 'The total error rate is', errorCount/mTest
+
+
+

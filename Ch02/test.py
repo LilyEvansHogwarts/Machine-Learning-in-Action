@@ -24,3 +24,8 @@ dataset, ranges, minVals = kNN.autoNorm(dataset)
 kNN.datingClassTest()
 
 kNN.classifyPerson()
+
+testVector = kNN.img2vector('./dataset/testDigits/0_13.txt')
+print testVector[0,:31]
+
+kNN.handwrittingClassTest()
